@@ -1,0 +1,8 @@
+1. Image-to-text: zczytywanie linii tekstu z obrazu
+    - https://huggingface.co/microsoft/trocr-large-handwritten
+
+2. Generowanie dłuższego tekstu z tej linii tekstu
+    - https://huggingface.co/openai-community/gpt2
+
+3. Text-to-speech
+    - https://huggingface.co/parler-tts/parler_tts_mini_v0.1

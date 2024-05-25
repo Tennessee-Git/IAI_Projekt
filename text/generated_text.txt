@@ -1,0 +1,4 @@
+Tell me about Python.
+
+Just like Python code is immutable, Python syntax is not.
+ (Though I know that the Python Standard Library (PSL) and the C++ standard library have changed the way Python behaves, so it's time
