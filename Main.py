@@ -4,10 +4,11 @@ import cv2
 import torch
 import soundfile as sf
 import sounddevice as sd
+import numpy as np
 
 IMAGE_TO_TEXT_MODEL = "microsoft/trocr-large-handwritten"
 GENERATIVE_MODEL = "gpt2"
-TEXT_TO_SPEECH_MODEL = "parler-tts/parler_tts_mini_v0.1"
+TEXT_TO_SPEECH_MODEL = "facebook/hf-seamless-m4t-medium"
 TTS_DESCRIPTION = "A female speaker with a slightly low-pitched voice delivers her words calmly with clear audio."
 AUDIO_FILE_PATH = "./speech/parler_tts_out.wav"
 TEXT_FILE_PATH = "./text/generated_text.txt"
@@ -28,11 +29,8 @@ class Image_to_text():
         self.gen_model =  GPT2LMHeadModel.from_pretrained("gpt2")
 
         print("\n", "--------------------------Text_to_speech model--------------------------")
-        # self.tts_model = ParlerTTSForConditionalGeneration.from_pretrained(TEXT_TO_SPEECH_MODEL).to(device)
-        # self.tts_tokenizer = AutoTokenizer.from_pretrained(TEXT_TO_SPEECH_MODEL)
-        # self.tts_desc = TTS_DESCRIPTION
-        self.tts_processor = AutoProcessor.from_pretrained("facebook/hf-seamless-m4t-medium")
-        self.tts_model = SeamlessM4TModel.from_pretrained("facebook/hf-seamless-m4t-medium")
+        self.tts_processor = AutoProcessor.from_pretrained(TEXT_TO_SPEECH_MODEL)
+        self.tts_model = SeamlessM4TModel.from_pretrained(TEXT_TO_SPEECH_MODEL)
         print("MODELS ARE READY")
 
         print("CAMERA SETUP")
@@ -105,7 +103,24 @@ class Image_to_text():
 
     def show_generated_text(self):
         print(self.generated_text)
-
+        cv2.namedWindow("Generated text")
+        img = 255 * np.ones((200, 800, 3), dtype=np.uint8)
+        text = self.generated_text.replace('\n\n', '\n').replace("\n", " ")
+        start = 0
+        N = 10
+        lines = text.split()
+        y = 30
+        for stop in range(N, len(lines) + N, N):
+            cv2.putText(img,
+                        " ".join(lines[start:stop]),
+                        (10,y),
+                        cv2.FONT_HERSHEY_PLAIN,
+                        self.font_scale,
+                        (0,0,0),
+                        self.font_thickness)
+            start = stop
+            y += 20
+        cv2.imshow("Generated text", img)
 
     def read_generated_text(self):
         if self.is_speech_generated:
@@ -118,10 +133,6 @@ class Image_to_text():
             self.generated_text = "..."
         else:
             print("Generating AUDIO from TEXT")
-            # input_ids = self.tts_tokenizer(self.tts_desc, return_tensors="pt").input_ids.to(device)
-            # prompt_input_ids = self.tts_tokenizer(self.generated_text, return_tensors="pt").input_ids.to(device)
-            # generation = self.tts_model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids).to(torch.float32)
-            # audio_arr = generation.cpu().numpy().squeeze()
             text_inputs = self.tts_processor(text = self.generated_text, src_lang="eng", return_tensors="pt")
             audio_arr = self.tts_model.generate(**text_inputs, tgt_lang="eng")[0].cpu().numpy().squeeze()
             sf.write(AUDIO_FILE_PATH, audio_arr, self.tts_model.config.sampling_rate)
