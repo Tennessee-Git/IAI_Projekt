@@ -1,5 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2LMHeadModel, set_seed, AutoTokenizer, TrOCRProcessor, VisionEncoderDecoderModel, pipeline, AutoProcessor, SeamlessM4TModel
-from parler_tts import ParlerTTSForConditionalGeneration
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, set_seed, TrOCRProcessor, VisionEncoderDecoderModel, AutoProcessor, SeamlessM4TModel
 import cv2
 import torch
 import soundfile as sf
@@ -10,7 +9,7 @@ IMAGE_TO_TEXT_MODEL = "microsoft/trocr-large-handwritten"
 GENERATIVE_MODEL = "gpt2"
 TEXT_TO_SPEECH_MODEL = "facebook/hf-seamless-m4t-medium"
 TTS_DESCRIPTION = "A female speaker with a slightly low-pitched voice delivers her words calmly with clear audio."
-AUDIO_FILE_PATH = "./speech/parler_tts_out.wav"
+AUDIO_FILE_PATH = "./speech/tts_out.wav"
 TEXT_FILE_PATH = "./text/generated_text.txt"
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"

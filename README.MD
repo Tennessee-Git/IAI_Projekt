@@ -9,15 +9,9 @@ Zastosowane modele:
    - https://huggingface.co/openai-community/gpt2
 
 3. Text-to-speech na podstawie wygenerowanego tekstu
-   - https://huggingface.co/parler-tts/parler_tts_mini_v0.1
+   - https://huggingface.co/facebook/hf-seamless-m4t-medium
 
 Instalacja pojedynczych bibliotek:
-
-- parler_tts
-
-```
-pip install git+https://github.com/huggingface/parler-tts.git
-```
 
 - transformers
 
@@ -35,10 +29,4 @@ pip install opencv-python
 
 ```
 pip install sounddevice
-```
-
-Wszystkie potrzebne biblioteki znajdują się w requirements.txt.
-
-```
-pip install -r requirements.txt
 ```
