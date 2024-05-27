@@ -25,8 +25,8 @@ class Image_to_text():
         self.itt_model = VisionEncoderDecoderModel.from_pretrained(IMAGE_TO_TEXT_MODEL)
 
         print("\n", "--------------------------Generative model--------------------------")
-        self.gen_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-        self.gen_model =  GPT2LMHeadModel.from_pretrained("gpt2")
+        self.gen_tokenizer = GPT2Tokenizer.from_pretrained(GENERATIVE_MODEL)
+        self.gen_model =  GPT2LMHeadModel.from_pretrained(GENERATIVE_MODEL)
 
         print("\n", "--------------------------Text_to_speech model--------------------------")
         self.tts_processor = AutoProcessor.from_pretrained(TEXT_TO_SPEECH_MODEL)
@@ -76,11 +76,13 @@ class Image_to_text():
         print("Generating extra TEXT from extracted")
         if self.is_text_generated:
             self.show_generated_text()
+            return
 
         if len(self.image_text) < 2 or self.image_text == "...":
             print("NO TEXT FROM IMAGE")
             self.error_text = "No text from image!"
             self.image_text = "..."
+            return
         else:
             print(f"Text from image: {self.image_text}")
             input_ids = self.gen_tokenizer.encode(self.image_text, return_tensors="pt")
